@@ -18,10 +18,7 @@ export function useResources() {
         // Simulate network delay
         await new Promise((resolve) => setTimeout(resolve, 1500));
         const initialResources = generateMockResources(15);
-        console.log(
-          "Initial resources:",
-          JSON.stringify(initialResources, null, 2)
-        );
+
         setResources(initialResources);
         setFilteredResources(initialResources);
       } finally {
@@ -35,10 +32,7 @@ export function useResources() {
     const intervalId = setInterval(() => {
       setResources((currentResources) => {
         const updatedResources = updateResourceMetrics(currentResources);
-        console.log(
-          "Updated resources:",
-          JSON.stringify(updatedResources, null, 2)
-        );
+
         return updatedResources;
       });
     }, 5000);
@@ -48,8 +42,6 @@ export function useResources() {
 
   useEffect(() => {
     let result = [...resources];
-    console.log("Filtering resources:", JSON.stringify(resources, null, 2));
-    console.log("Current filters:", JSON.stringify(filters, null, 2));
 
     if (filters.status) {
       result = result.filter((resource) => resource.status === filters.status);
@@ -78,17 +70,8 @@ export function useResources() {
       );
     }
 
-    console.log("Filtered result:", JSON.stringify(result, null, 2));
     setFilteredResources(result);
   }, [resources, filters]);
-
-  // Debug log whenever filtered resources change
-  useEffect(() => {
-    console.log(
-      "FilteredResources updated:",
-      JSON.stringify(filteredResources, null, 2)
-    );
-  }, [filteredResources]);
 
   const updateFilters = (newFilters: Partial<FilterOptions>) => {
     setFilters((prev) => ({ ...prev, ...newFilters }));
