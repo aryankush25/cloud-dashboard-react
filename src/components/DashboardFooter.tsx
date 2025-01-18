@@ -65,37 +65,51 @@ export function DashboardFooter({ resources }: DashboardFooterProps) {
 
   return (
     <footer className="mt-auto bg-white border-t">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Total Resources */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-500 mb-4">
-              Resources
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="text-base font-semibold text-gray-900 mb-6">
+              Resources Overview
             </h3>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <p className="text-2xl font-semibold text-gray-900">
+                <p className="text-3xl font-bold text-gray-900">
                   {analytics.total}
                 </p>
-                <p className="text-sm text-gray-500">Total</p>
+                <p className="text-sm font-medium text-gray-700">
+                  Total Resources
+                </p>
               </div>
               <div>
-                <div className="space-y-1">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-green-600">Healthy</span>
-                    <span>{analytics.status.healthy}</span>
+                <div className="space-y-3">
+                  <div className="flex justify-between text-sm font-medium">
+                    <span className="text-green-600 font-semibold">
+                      Healthy
+                    </span>
+                    <span className="text-gray-900 font-bold">
+                      {analytics.status.healthy}
+                    </span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-yellow-600">Warning</span>
-                    <span>{analytics.status.warning}</span>
+                  <div className="flex justify-between text-sm font-medium">
+                    <span className="text-yellow-600 font-semibold">
+                      Warning
+                    </span>
+                    <span className="text-gray-900 font-bold">
+                      {analytics.status.warning}
+                    </span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-red-600">Critical</span>
-                    <span>{analytics.status.critical}</span>
+                  <div className="flex justify-between text-sm font-medium">
+                    <span className="text-red-600 font-semibold">Critical</span>
+                    <span className="text-gray-900 font-bold">
+                      {analytics.status.critical}
+                    </span>
                   </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-gray-600">Offline</span>
-                    <span>{analytics.status.offline}</span>
+                  <div className="flex justify-between text-sm font-medium">
+                    <span className="text-gray-600 font-semibold">Offline</span>
+                    <span className="text-gray-900 font-bold">
+                      {analytics.status.offline}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -103,26 +117,26 @@ export function DashboardFooter({ resources }: DashboardFooterProps) {
           </div>
 
           {/* Resource Types */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-500 mb-4">
-              Resource Types
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="text-base font-semibold text-gray-900 mb-6">
+              Resource Distribution
             </h3>
             <div className="space-y-5">
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <div className="flex items-center gap-2">
-                    <ServerIcon className="h-5 w-5 text-blue-500" />
-                    <span className="text-sm font-medium text-gray-900">
+                    <ServerIcon className="h-5 w-5 text-blue-600" />
+                    <span className="text-sm font-semibold text-gray-900">
                       Servers
                     </span>
                   </div>
-                  <span className="text-2xl font-semibold text-gray-900">
+                  <span className="text-2xl font-bold text-gray-900">
                     {analytics.type.server}
                   </span>
                 </div>
-                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-blue-400 to-blue-500 rounded-full transition-all duration-500 ease-in-out"
+                    className="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full transition-all duration-500 ease-in-out shadow-sm"
                     style={{
                       width: `${
                         analytics.total
@@ -137,18 +151,18 @@ export function DashboardFooter({ resources }: DashboardFooterProps) {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <div className="flex items-center gap-2">
-                    <CircleStackIcon className="h-5 w-5 text-purple-500" />
-                    <span className="text-sm font-medium text-gray-900">
+                    <CircleStackIcon className="h-5 w-5 text-purple-600" />
+                    <span className="text-sm font-semibold text-gray-900">
                       Databases
                     </span>
                   </div>
-                  <span className="text-2xl font-semibold text-gray-900">
+                  <span className="text-2xl font-bold text-gray-900">
                     {analytics.type.database}
                   </span>
                 </div>
-                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-purple-400 to-purple-500 rounded-full transition-all duration-500 ease-in-out"
+                    className="h-full bg-gradient-to-r from-purple-500 to-purple-600 rounded-full transition-all duration-500 ease-in-out shadow-sm"
                     style={{
                       width: `${
                         analytics.total
@@ -163,18 +177,18 @@ export function DashboardFooter({ resources }: DashboardFooterProps) {
               <div>
                 <div className="flex justify-between items-center mb-2">
                   <div className="flex items-center gap-2">
-                    <ArchiveBoxIcon className="h-5 w-5 text-teal-500" />
-                    <span className="text-sm font-medium text-gray-900">
+                    <ArchiveBoxIcon className="h-5 w-5 text-teal-600" />
+                    <span className="text-sm font-semibold text-gray-900">
                       Storage
                     </span>
                   </div>
-                  <span className="text-2xl font-semibold text-gray-900">
+                  <span className="text-2xl font-bold text-gray-900">
                     {analytics.type.storage}
                   </span>
                 </div>
-                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                <div className="h-3 bg-gray-200 rounded-full overflow-hidden">
                   <div
-                    className="h-full bg-gradient-to-r from-teal-400 to-teal-500 rounded-full transition-all duration-500 ease-in-out"
+                    className="h-full bg-gradient-to-r from-teal-500 to-teal-600 rounded-full transition-all duration-500 ease-in-out shadow-sm"
                     style={{
                       width: `${
                         analytics.total
@@ -189,49 +203,51 @@ export function DashboardFooter({ resources }: DashboardFooterProps) {
           </div>
 
           {/* Average Metrics */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-500 mb-4">
-              Average Metrics
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="text-base font-semibold text-gray-900 mb-6">
+              Performance Metrics
             </h3>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-6">
               <div>
-                <p className="text-2xl font-semibold text-gray-900">
+                <p className="text-2xl font-bold text-gray-900">
                   {analytics.averages.cpu}%
                 </p>
-                <p className="text-sm text-gray-500">CPU Usage</p>
+                <p className="text-sm font-semibold text-gray-700">CPU Usage</p>
               </div>
               <div>
-                <p className="text-2xl font-semibold text-gray-900">
+                <p className="text-2xl font-bold text-gray-900">
                   {analytics.averages.memory}%
                 </p>
-                <p className="text-sm text-gray-500">Memory</p>
+                <p className="text-sm font-semibold text-gray-700">Memory</p>
               </div>
               <div>
-                <p className="text-2xl font-semibold text-gray-900">
+                <p className="text-2xl font-bold text-gray-900">
                   {analytics.averages.disk}%
                 </p>
-                <p className="text-sm text-gray-500">Disk</p>
+                <p className="text-sm font-semibold text-gray-700">Disk</p>
               </div>
               <div>
-                <p className="text-2xl font-semibold text-gray-900">
+                <p className="text-2xl font-bold text-gray-900">
                   {analytics.averages.network}%
                 </p>
-                <p className="text-sm text-gray-500">Network</p>
+                <p className="text-sm font-semibold text-gray-700">Network</p>
               </div>
             </div>
           </div>
 
           {/* Links */}
-          <div>
-            <h3 className="text-sm font-medium text-gray-500 mb-4">Links</h3>
-            <div className="grid grid-cols-2 gap-4">
+          <div className="bg-gray-50 rounded-lg p-6">
+            <h3 className="text-base font-semibold text-gray-900 mb-6">
+              Quick Links
+            </h3>
+            <div className="grid grid-cols-2 gap-6">
               <div>
-                <h4 className="font-medium text-gray-900 mb-2">Resources</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">Resources</h4>
                 <ul className="space-y-2">
                   <li>
                     <a
                       href="#"
-                      className="text-sm text-gray-500 hover:text-gray-900"
+                      className="text-sm font-medium text-gray-700 hover:text-gray-900"
                     >
                       Documentation
                     </a>
@@ -239,7 +255,7 @@ export function DashboardFooter({ resources }: DashboardFooterProps) {
                   <li>
                     <a
                       href="#"
-                      className="text-sm text-gray-500 hover:text-gray-900"
+                      className="text-sm font-medium text-gray-700 hover:text-gray-900"
                     >
                       API Reference
                     </a>
@@ -247,12 +263,12 @@ export function DashboardFooter({ resources }: DashboardFooterProps) {
                 </ul>
               </div>
               <div>
-                <h4 className="font-medium text-gray-900 mb-2">Support</h4>
+                <h4 className="font-semibold text-gray-900 mb-3">Support</h4>
                 <ul className="space-y-2">
                   <li>
                     <a
                       href="#"
-                      className="text-sm text-gray-500 hover:text-gray-900"
+                      className="text-sm font-medium text-gray-700 hover:text-gray-900"
                     >
                       Help Center
                     </a>
@@ -260,7 +276,7 @@ export function DashboardFooter({ resources }: DashboardFooterProps) {
                   <li>
                     <a
                       href="#"
-                      className="text-sm text-gray-500 hover:text-gray-900"
+                      className="text-sm font-medium text-gray-700 hover:text-gray-900"
                     >
                       Contact Us
                     </a>
@@ -272,8 +288,8 @@ export function DashboardFooter({ resources }: DashboardFooterProps) {
         </div>
 
         {/* Copyright */}
-        <div className="mt-8 pt-8 border-t">
-          <p className="text-sm text-gray-500 text-center">
+        <div className="mt-12 pt-8 border-t">
+          <p className="text-sm font-medium text-gray-700 text-center">
             © {new Date().getFullYear()} Cloud Resource Dashboard. All rights
             reserved.
           </p>
