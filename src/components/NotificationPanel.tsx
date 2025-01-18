@@ -16,6 +16,8 @@ interface NotificationPanelProps {
   onMarkAsRead: (id: string) => void;
   onRemove: (id: string) => void;
   onClearAll: () => void;
+  isOpen: boolean;
+  onClose: () => void;
 }
 
 const notificationConfig = {
@@ -51,48 +53,91 @@ export function NotificationPanel({
   onMarkAsRead,
   onRemove,
   onClearAll,
+  isOpen,
+  onClose,
 }: NotificationPanelProps) {
   return (
-    <div className="w-full max-w-sm bg-white rounded-lg shadow-lg h-full flex flex-col">
-      <div className="p-4 border-b flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <BellIcon className="h-5 w-5 text-gray-500" />
-          <h3 className="font-medium">Notifications</h3>
-          {unreadCount > 0 && (
-            <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full">
-              {unreadCount}
-            </span>
-          )}
-        </div>
-        {notifications.length > 0 && (
-          <button
-            onClick={onClearAll}
-            className="text-sm text-gray-500 hover:text-gray-700"
-          >
-            Clear all
-          </button>
-        )}
-      </div>
+    <>
+      {/* Backdrop */}
+      <Transition
+        show={isOpen}
+        enter="transition-opacity duration-300"
+        enterFrom="opacity-0"
+        enterTo="opacity-100"
+        leave="transition-opacity duration-300"
+        leaveFrom="opacity-100"
+        leaveTo="opacity-0"
+        as={React.Fragment}
+      >
+        <div
+          className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40"
+          onClick={onClose}
+        />
+      </Transition>
 
-      <div className="flex-1 overflow-y-auto">
-        {notifications.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">
-            No notifications to display
+      {/* Drawer */}
+      <Transition
+        show={isOpen}
+        enter="transform transition-transform duration-300"
+        enterFrom="translate-x-full"
+        enterTo="translate-x-0"
+        leave="transform transition-transform duration-300"
+        leaveFrom="translate-x-0"
+        leaveTo="translate-x-full"
+        as="div"
+        className="fixed right-0 top-0 h-full w-96 bg-white shadow-xl z-50"
+      >
+        <div className="flex flex-col h-full">
+          <div className="p-4 border-b border-gray-100 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <BellIcon className="h-5 w-5 text-gray-500" />
+              <h3 className="font-medium text-gray-900">Notifications</h3>
+              {unreadCount > 0 && (
+                <span className="bg-blue-500 text-white text-xs px-2 py-0.5 rounded-full">
+                  {unreadCount}
+                </span>
+              )}
+            </div>
+            <div className="flex items-center gap-4">
+              {notifications.length > 0 && (
+                <button
+                  onClick={onClearAll}
+                  className="text-sm text-gray-500 hover:text-gray-700"
+                >
+                  Clear all
+                </button>
+              )}
+              <button
+                onClick={onClose}
+                className="text-gray-400 hover:text-gray-600"
+                aria-label="Close notifications"
+              >
+                <XMarkIcon className="h-5 w-5" />
+              </button>
+            </div>
           </div>
-        ) : (
-          <div className="divide-y divide-gray-100">
-            {notifications.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                notification={notification}
-                onMarkAsRead={onMarkAsRead}
-                onRemove={onRemove}
-              />
-            ))}
+
+          <div className="flex-1 overflow-y-auto">
+            {notifications.length === 0 ? (
+              <div className="p-8 text-center text-gray-500">
+                No notifications to display
+              </div>
+            ) : (
+              <div className="divide-y divide-gray-100">
+                {notifications.map((notification) => (
+                  <NotificationItem
+                    key={notification.id}
+                    notification={notification}
+                    onMarkAsRead={onMarkAsRead}
+                    onRemove={onRemove}
+                  />
+                ))}
+              </div>
+            )}
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      </Transition>
+    </>
   );
 }
 
@@ -117,6 +162,7 @@ function NotificationItem({
       enter="transition-all duration-300"
       enterFrom="opacity-0 -translate-x-4"
       enterTo="opacity-100 translate-x-0"
+      as="div"
     >
       <div
         className={`p-4 ${config.bgColor} ${
@@ -125,17 +171,19 @@ function NotificationItem({
       >
         <div className="flex gap-3">
           <Icon className={`h-5 w-5 ${config.color} flex-shrink-0`} />
-          <div className="flex-grow">
-            <div className="flex justify-between items-start">
-              <div>
-                <h4 className="font-medium text-sm">{notification.title}</h4>
-                <p className="text-sm text-gray-600 mt-1">
+          <div className="flex-grow min-w-0">
+            <div className="flex justify-between items-start gap-2">
+              <div className="min-w-0">
+                <h4 className="font-medium text-sm text-gray-900 truncate">
+                  {notification.title}
+                </h4>
+                <p className="text-sm text-gray-600 mt-1 break-words">
                   {notification.message}
                 </p>
               </div>
               <button
                 onClick={() => onRemove(notification.id)}
-                className="text-gray-400 hover:text-gray-600"
+                className="text-gray-400 hover:text-gray-600 flex-shrink-0"
                 aria-label="Remove notification"
               >
                 <XMarkIcon className="h-4 w-4" />

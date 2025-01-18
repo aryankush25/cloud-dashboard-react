@@ -33,6 +33,14 @@ ChartJS.defaults.borderColor = "#E5E7EB";
 const chartOptions = {
   responsive: true,
   maintainAspectRatio: false,
+  layout: {
+    padding: {
+      left: 8,
+      right: 8,
+      top: 8,
+      bottom: 8,
+    },
+  },
   plugins: {
     legend: {
       display: false,
@@ -76,6 +84,7 @@ const chartOptions = {
       },
       ticks: {
         padding: 8,
+        maxTicksLimit: 6,
         callback: function (value: number | string) {
           return `${value}%`;
         },
@@ -90,6 +99,7 @@ const chartOptions = {
         maxRotation: 0,
         autoSkip: true,
         maxTicksLimit: 6,
+        padding: 8,
       },
     },
   },
@@ -102,6 +112,7 @@ const chartOptions = {
     line: {
       tension: 0.4,
       borderWidth: 2,
+      fill: true,
     },
     point: {
       radius: 0,
@@ -122,10 +133,10 @@ export function MetricChart({ type, title, className = "" }: MetricChartProps) {
 
   return (
     <div
-      className={`bg-white p-6 rounded-lg shadow-md border border-gray-100 ${className}`}
+      className={`h-full p-6 rounded-lg shadow-md border border-gray-100 bg-white ${className}`}
     >
-      <h3 className="text-lg font-medium mb-4 text-gray-900">{title}</h3>
-      <div className="h-[200px]">
+      <h3 className="text-lg font-medium text-gray-900 mb-4">{title}</h3>
+      <div className="h-[calc(100%-3.5rem)]">
         <Line options={chartOptions} data={getFormattedData()} />
       </div>
     </div>

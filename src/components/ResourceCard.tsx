@@ -45,43 +45,55 @@ export function ResourceCard({ resource, onClick }: ResourceCardProps) {
 
   return (
     <div
-      className={`p-6 rounded-lg border shadow-md ${status.borderColor} ${status.bgColor} cursor-pointer transition-all hover:scale-[1.02] hover:shadow-lg bg-white/50 backdrop-blur-sm`}
+      className={`h-full p-6 rounded-lg border shadow-md ${status.borderColor} ${status.bgColor} cursor-pointer transition-all hover:scale-[1.02] hover:shadow-lg bg-white/50 backdrop-blur-sm`}
       onClick={() => onClick?.(resource)}
     >
-      <div className="flex items-center justify-between mb-2">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <StatusIcon className={`h-5 w-5 ${status.color}`} />
-          <h3 className="font-medium text-gray-900">{resource.name}</h3>
+          <StatusIcon className={`h-5 w-5 ${status.color} flex-shrink-0`} />
+          <h3 className="font-medium text-gray-900 truncate">
+            {resource.name}
+          </h3>
         </div>
-        <span className="text-sm text-gray-500">{resource.type}</span>
+        <span className="text-sm text-gray-500 flex-shrink-0">
+          {resource.type}
+        </span>
       </div>
 
-      <div className="grid grid-cols-2 gap-4 mt-4">
-        <MetricItem
-          label="CPU"
-          value={resource.metrics.cpu}
-          color={getMetricColor(resource.metrics.cpu)}
-        />
-        <MetricItem
-          label="Memory"
-          value={resource.metrics.memory}
-          color={getMetricColor(resource.metrics.memory)}
-        />
-        <MetricItem
-          label="Disk"
-          value={resource.metrics.disk}
-          color={getMetricColor(resource.metrics.disk)}
-        />
-        <MetricItem
-          label="Network"
-          value={resource.metrics.network}
-          color={getMetricColor(resource.metrics.network)}
-        />
+      <div className="flex flex-wrap gap-4 mt-4">
+        <div className="flex-1 min-w-[calc(50%-8px)]">
+          <MetricItem
+            label="CPU"
+            value={resource.metrics.cpu}
+            color={getMetricColor(resource.metrics.cpu)}
+          />
+        </div>
+        <div className="flex-1 min-w-[calc(50%-8px)]">
+          <MetricItem
+            label="Memory"
+            value={resource.metrics.memory}
+            color={getMetricColor(resource.metrics.memory)}
+          />
+        </div>
+        <div className="flex-1 min-w-[calc(50%-8px)]">
+          <MetricItem
+            label="Disk"
+            value={resource.metrics.disk}
+            color={getMetricColor(resource.metrics.disk)}
+          />
+        </div>
+        <div className="flex-1 min-w-[calc(50%-8px)]">
+          <MetricItem
+            label="Network"
+            value={resource.metrics.network}
+            color={getMetricColor(resource.metrics.network)}
+          />
+        </div>
       </div>
 
       <div className="flex justify-between mt-4 text-sm text-gray-500">
-        <span>{resource.region}</span>
-        <span>{resource.account}</span>
+        <span className="truncate">{resource.region}</span>
+        <span className="truncate ml-2">{resource.account}</span>
       </div>
     </div>
   );
@@ -95,7 +107,7 @@ interface MetricItemProps {
 
 function MetricItem({ label, value, color }: MetricItemProps) {
   return (
-    <div>
+    <div className="w-full">
       <div className="flex justify-between text-sm mb-1">
         <span>{label}</span>
         <span className={color}>{value}%</span>
