@@ -1,11 +1,24 @@
 import React from "react";
-import { FilterOptions, Resource } from "../types";
-import { Listbox } from "@headlessui/react";
-import { ChevronDownIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { Resource } from "../types";
+import {
+  MagnifyingGlassIcon,
+  XMarkIcon,
+  CircleStackIcon,
+  GlobeAltIcon,
+  BuildingOfficeIcon,
+  SignalIcon,
+} from "@heroicons/react/24/outline";
+import { FunnelIcon } from "@heroicons/react/24/solid";
 
 interface FilterBarProps {
-  filters: FilterOptions;
-  onUpdateFilters: (filters: Partial<FilterOptions>) => void;
+  filters: {
+    search?: string;
+    status?: string;
+    type?: string;
+    region?: string;
+    account?: string;
+  };
+  onUpdateFilters: (filters: FilterBarProps["filters"]) => void;
   onClearFilters: () => void;
   resources: Resource[];
 }
@@ -16,130 +29,199 @@ export function FilterBar({
   onClearFilters,
   resources,
 }: FilterBarProps) {
-  // Extract unique values from resources
-  const uniqueRegions = [...new Set(resources.map((r) => r.region))];
-  const uniqueAccounts = [...new Set(resources.map((r) => r.account))];
+  // Get unique values for each filter
+  const uniqueValues = React.useMemo(() => {
+    const statuses = new Set<string>();
+    const types = new Set<string>();
+    const regions = new Set<string>();
+    const accounts = new Set<string>();
 
-  const statusOptions = ["healthy", "warning", "critical", "offline"] as const;
-  const typeOptions = ["server", "database", "storage"] as const;
+    resources.forEach((resource) => {
+      statuses.add(resource.status);
+      types.add(resource.type);
+      regions.add(resource.region);
+      accounts.add(resource.account);
+    });
+
+    return {
+      statuses: Array.from(statuses),
+      types: Array.from(types),
+      regions: Array.from(regions),
+      accounts: Array.from(accounts),
+    };
+  }, [resources]);
+
+  const hasActiveFilters =
+    filters.search ||
+    filters.status ||
+    filters.type ||
+    filters.region ||
+    filters.account;
 
   return (
-    <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 space-y-4">
-      <div className="flex items-center gap-4 flex-wrap">
-        <div className="flex-grow min-w-[200px]">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search resources..."
-              className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400"
-              value={filters.search || ""}
-              onChange={(e) => onUpdateFilters({ search: e.target.value })}
-            />
-            {filters.search && (
-              <button
-                onClick={() => onUpdateFilters({ search: "" })}
-                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                aria-label="Clear search"
-              >
-                <XMarkIcon className="h-5 w-5" />
-              </button>
+    <div className="bg-white rounded-xl shadow-sm border border-gray-100">
+      <div className="p-4">
+        <div className="flex flex-col sm:flex-row gap-6">
+          {/* Search */}
+          <div className="flex-1">
+            <div className="relative">
+              <MagnifyingGlassIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Search resources..."
+                value={filters.search || ""}
+                onChange={(e) =>
+                  onUpdateFilters({ ...filters, search: e.target.value })
+                }
+                className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow"
+                aria-label="Search resources"
+              />
+            </div>
+          </div>
+
+          {/* Filters */}
+          <div className="flex flex-wrap gap-4">
+            {/* Status */}
+            <div className="min-w-[140px]">
+              <div className="relative">
+                <select
+                  value={filters.status || ""}
+                  onChange={(e) =>
+                    onUpdateFilters({ ...filters, status: e.target.value })
+                  }
+                  className="w-full pl-3 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow appearance-none cursor-pointer"
+                  aria-label="Filter by status"
+                >
+                  <option value="">All Status</option>
+                  {uniqueValues.statuses.map((status) => (
+                    <option key={status} value={status}>
+                      {status.charAt(0).toUpperCase() + status.slice(1)}
+                    </option>
+                  ))}
+                </select>
+                <SignalIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Type */}
+            <div className="min-w-[140px]">
+              <div className="relative">
+                <select
+                  value={filters.type || ""}
+                  onChange={(e) =>
+                    onUpdateFilters({ ...filters, type: e.target.value })
+                  }
+                  className="w-full pl-3 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow appearance-none cursor-pointer"
+                  aria-label="Filter by type"
+                >
+                  <option value="">All Types</option>
+                  {uniqueValues.types.map((type) => (
+                    <option key={type} value={type}>
+                      {type.charAt(0).toUpperCase() + type.slice(1)}
+                    </option>
+                  ))}
+                </select>
+                <CircleStackIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Region */}
+            <div className="min-w-[140px]">
+              <div className="relative">
+                <select
+                  value={filters.region || ""}
+                  onChange={(e) =>
+                    onUpdateFilters({ ...filters, region: e.target.value })
+                  }
+                  className="w-full pl-3 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow appearance-none cursor-pointer"
+                  aria-label="Filter by region"
+                >
+                  <option value="">All Regions</option>
+                  {uniqueValues.regions.map((region) => (
+                    <option key={region} value={region}>
+                      {region}
+                    </option>
+                  ))}
+                </select>
+                <GlobeAltIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Account */}
+            <div className="min-w-[140px]">
+              <div className="relative">
+                <select
+                  value={filters.account || ""}
+                  onChange={(e) =>
+                    onUpdateFilters({ ...filters, account: e.target.value })
+                  }
+                  className="w-full pl-3 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow appearance-none cursor-pointer"
+                  aria-label="Filter by account"
+                >
+                  <option value="">All Accounts</option>
+                  {uniqueValues.accounts.map((account) => (
+                    <option key={account} value={account}>
+                      {account}
+                    </option>
+                  ))}
+                </select>
+                <BuildingOfficeIcon className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-500 pointer-events-none" />
+              </div>
+            </div>
+
+            {/* Clear Filters */}
+            {hasActiveFilters && (
+              <div className="flex items-center">
+                <button
+                  onClick={onClearFilters}
+                  className="flex items-center gap-1.5 px-3 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition-colors"
+                  aria-label="Clear all filters"
+                >
+                  <XMarkIcon className="h-4 w-4" />
+                  Clear
+                </button>
+              </div>
             )}
           </div>
         </div>
-
-        <FilterDropdown
-          label="Status"
-          value={filters.status}
-          options={statusOptions}
-          onChange={(value) => onUpdateFilters({ status: value })}
-        />
-
-        <FilterDropdown
-          label="Type"
-          value={filters.type}
-          options={typeOptions}
-          onChange={(value) => onUpdateFilters({ type: value })}
-        />
-
-        <FilterDropdown
-          label="Region"
-          value={filters.region}
-          options={uniqueRegions}
-          onChange={(value) => onUpdateFilters({ region: value })}
-        />
-
-        <FilterDropdown
-          label="Account"
-          value={filters.account}
-          options={uniqueAccounts}
-          onChange={(value) => onUpdateFilters({ account: value })}
-        />
-
-        {(filters.status ||
-          filters.type ||
-          filters.region ||
-          filters.account ||
-          filters.search) && (
-          <button
-            onClick={onClearFilters}
-            className="px-4 py-2 text-sm text-gray-600 hover:text-gray-800 hover:bg-gray-50 rounded-lg transition-colors"
-          >
-            Clear filters
-          </button>
-        )}
       </div>
+
+      {/* Active Filters */}
+      {hasActiveFilters && (
+        <div className="px-4 py-3 bg-gray-50 border-t border-gray-100 rounded-b-xl">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <FunnelIcon className="h-4 w-4" />
+            <span className="font-medium">Active Filters:</span>
+            <div className="flex flex-wrap gap-2">
+              {filters.search && (
+                <span className="inline-flex items-center px-2.5 py-1.5 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors shadow-sm">
+                  Search: {filters.search}
+                </span>
+              )}
+              {filters.status && (
+                <span className="inline-flex items-center px-2.5 py-1.5 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors shadow-sm">
+                  Status: {filters.status}
+                </span>
+              )}
+              {filters.type && (
+                <span className="inline-flex items-center px-2.5 py-1.5 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors shadow-sm">
+                  Type: {filters.type}
+                </span>
+              )}
+              {filters.region && (
+                <span className="inline-flex items-center px-2.5 py-1.5 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors shadow-sm">
+                  Region: {filters.region}
+                </span>
+              )}
+              {filters.account && (
+                <span className="inline-flex items-center px-2.5 py-1.5 bg-blue-50 text-blue-700 rounded-lg hover:bg-blue-100 transition-colors shadow-sm">
+                  Account: {filters.account}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-  );
-}
-
-interface FilterDropdownProps<T> {
-  label: string;
-  value?: T;
-  options: readonly T[];
-  onChange: (value: T | undefined) => void;
-}
-
-function FilterDropdown<T extends string>({
-  label,
-  value,
-  options,
-  onChange,
-}: FilterDropdownProps<T>) {
-  return (
-    <Listbox value={value} onChange={onChange}>
-      <div className="relative min-w-[150px]">
-        <Listbox.Button className="w-full flex items-center justify-between gap-2 px-4 py-2 text-left border rounded-lg bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors">
-          <span className="block truncate text-sm">
-            {value ? value : `Select ${label}`}
-          </span>
-          <ChevronDownIcon className="h-4 w-4 text-gray-400" />
-        </Listbox.Button>
-        <Listbox.Options className="absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg max-h-60 overflow-auto focus:outline-none">
-          <Listbox.Option
-            value={undefined}
-            className={({ active }) =>
-              `cursor-pointer select-none relative py-2 px-4 text-sm ${
-                active ? "bg-blue-50 text-blue-900" : "text-gray-900"
-              }`
-            }
-          >
-            {`All ${label}s`}
-          </Listbox.Option>
-          {options.map((option) => (
-            <Listbox.Option
-              key={option}
-              value={option}
-              className={({ active }) =>
-                `cursor-pointer select-none relative py-2 px-4 text-sm ${
-                  active ? "bg-blue-50 text-blue-900" : "text-gray-900"
-                }`
-              }
-            >
-              {option}
-            </Listbox.Option>
-          ))}
-        </Listbox.Options>
-      </div>
-    </Listbox>
   );
 }
