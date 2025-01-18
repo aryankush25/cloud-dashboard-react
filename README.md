@@ -20,6 +20,16 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Design and Technical Choices
+
+- **Framework**: The application is built using Next.js, which is easy to set up with an inbuilt routes structure. It provides server-side rendering (SSR) and client-side rendering (CSR) capabilities, enhancing performance and SEO.
+- **Styling**: Tailwind CSS is used for styling, offering utility-first CSS classes for rapid UI development.
+- **UI Components**: The project utilizes `@headlessui/react` and `@heroicons/react` for accessible and customizable UI components.
+- **Charts**: `chart.js` and `react-chartjs-2` are used for creating interactive and responsive charts.
+- **Notifications**: `react-hot-toast` is used for displaying non-blocking notifications.
+- **Utility Classes**: `clsx` is used for conditionally joining class names.
+- **TypeScript**: The project is written in TypeScript, providing static type checking and improving code quality.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:
