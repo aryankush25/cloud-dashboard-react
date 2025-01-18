@@ -12,8 +12,14 @@ import { useNotifications } from "../hooks/useNotifications";
 import { BellIcon } from "@heroicons/react/24/solid";
 
 export default function Dashboard() {
-  const { resources, allResources, filters, updateFilters, clearFilters } =
-    useResources();
+  const {
+    resources,
+    allResources,
+    filters,
+    updateFilters,
+    clearFilters,
+    isLoading,
+  } = useResources();
   const [isNotificationOpen, setIsNotificationOpen] = React.useState(false);
 
   const {
@@ -103,7 +109,17 @@ export default function Dashboard() {
 
           {/* Resources Grid */}
           <div className="flex flex-wrap gap-6">
-            {resources.length === 0 ? (
+            {isLoading ? (
+              // Show skeleton cards while loading
+              [...Array(6)].map((_, index) => (
+                <div
+                  key={`skeleton-${index}`}
+                  className="w-full sm:w-[calc(50%-12px)] xl:w-[calc(33.333%-16px)]"
+                >
+                  <ResourceCard isLoading={true} />
+                </div>
+              ))
+            ) : resources.length === 0 ? (
               <div className="w-full p-8 text-center text-gray-500 bg-white rounded-lg">
                 No resources match the current filters
               </div>
@@ -113,7 +129,7 @@ export default function Dashboard() {
                   key={resource.id}
                   className="w-full sm:w-[calc(50%-12px)] xl:w-[calc(33.333%-16px)]"
                 >
-                  <ResourceCard resource={resource} />
+                  <ResourceCard resource={resource} isLoading={false} />
                 </div>
               ))
             )}

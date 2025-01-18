@@ -6,10 +6,20 @@ export function useMetricHistory(
   metricType: "cpu" | "memory" | "disk" | "network"
 ) {
   const [history, setHistory] = useState<MetricHistory[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Initialize with 24 hours of historical data
-    setHistory(getMetricHistory(24));
+    const fetchData = async () => {
+      try {
+        // Simulate API delay
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        setHistory(getMetricHistory(24));
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
 
     // Update history every minute with new data point
     const intervalId = setInterval(() => {
@@ -53,6 +63,7 @@ export function useMetricHistory(
   return {
     history,
     getFormattedData,
+    isLoading,
   };
 }
 

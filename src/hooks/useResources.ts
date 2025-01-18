@@ -9,16 +9,27 @@ export function useResources() {
   const [resources, setResources] = useState<Resource[]>([]);
   const [filteredResources, setFilteredResources] = useState<Resource[]>([]);
   const [filters, setFilters] = useState<FilterOptions>({});
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Initialize with mock data
-    const initialResources = generateMockResources(15);
-    console.log(
-      "Initial resources:",
-      JSON.stringify(initialResources, null, 2)
-    );
-    setResources(initialResources);
-    setFilteredResources(initialResources);
+    // Simulate API loading delay
+    const fetchData = async () => {
+      try {
+        // Simulate network delay
+        await new Promise((resolve) => setTimeout(resolve, 1500));
+        const initialResources = generateMockResources(15);
+        console.log(
+          "Initial resources:",
+          JSON.stringify(initialResources, null, 2)
+        );
+        setResources(initialResources);
+        setFilteredResources(initialResources);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
 
     // Update metrics every 5 seconds
     const intervalId = setInterval(() => {
@@ -93,5 +104,6 @@ export function useResources() {
     filters,
     updateFilters,
     clearFilters,
+    isLoading,
   };
 }

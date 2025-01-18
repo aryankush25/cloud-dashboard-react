@@ -1,5 +1,5 @@
 import React from "react";
-import { Resource } from "../types";
+import { Resource, FilterOptions } from "../types";
 import {
   MagnifyingGlassIcon,
   XMarkIcon,
@@ -11,14 +11,8 @@ import {
 import { FunnelIcon } from "@heroicons/react/24/solid";
 
 interface FilterBarProps {
-  filters: {
-    search?: string;
-    status?: string;
-    type?: string;
-    region?: string;
-    account?: string;
-  };
-  onUpdateFilters: (filters: FilterBarProps["filters"]) => void;
+  filters: FilterOptions;
+  onUpdateFilters: (filters: FilterOptions) => void;
   onClearFilters: () => void;
   resources: Resource[];
 }
@@ -31,8 +25,8 @@ export function FilterBar({
 }: FilterBarProps) {
   // Get unique values for each filter
   const uniqueValues = React.useMemo(() => {
-    const statuses = new Set<string>();
-    const types = new Set<string>();
+    const statuses = new Set<Resource["status"]>();
+    const types = new Set<Resource["type"]>();
     const regions = new Set<string>();
     const accounts = new Set<string>();
 
@@ -87,7 +81,11 @@ export function FilterBar({
                 <select
                   value={filters.status || ""}
                   onChange={(e) =>
-                    onUpdateFilters({ ...filters, status: e.target.value })
+                    onUpdateFilters({
+                      ...filters,
+                      status:
+                        (e.target.value as Resource["status"]) || undefined,
+                    })
                   }
                   className="w-full pl-3 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow appearance-none cursor-pointer"
                   aria-label="Filter by status"
@@ -109,7 +107,10 @@ export function FilterBar({
                 <select
                   value={filters.type || ""}
                   onChange={(e) =>
-                    onUpdateFilters({ ...filters, type: e.target.value })
+                    onUpdateFilters({
+                      ...filters,
+                      type: (e.target.value as Resource["type"]) || undefined,
+                    })
                   }
                   className="w-full pl-3 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-shadow appearance-none cursor-pointer"
                   aria-label="Filter by type"

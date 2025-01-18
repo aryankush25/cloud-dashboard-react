@@ -7,9 +7,48 @@ import {
   MinusCircleIcon,
 } from "@heroicons/react/24/solid";
 
+export function ResourceCardSkeleton() {
+  return (
+    <div className="h-full p-6 rounded-lg border shadow-sm border-gray-200 bg-white/50 backdrop-blur-sm animate-pulse">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <div className="h-5 w-5 rounded-full bg-gray-200" />
+          <div className="h-4 w-32 bg-gray-200 rounded" />
+        </div>
+        <div className="h-4 w-20 bg-gray-200 rounded" />
+      </div>
+
+      <div className="flex flex-wrap gap-4 mt-4">
+        {[...Array(4)].map((_, index) => (
+          <div key={index} className="flex-1 min-w-[calc(50%-8px)]">
+            <div className="w-full">
+              <div className="flex justify-between text-sm mb-1">
+                <div className="h-3 w-12 bg-gray-200 rounded" />
+                <div className="h-3 w-8 bg-gray-200 rounded" />
+              </div>
+              <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gray-200 rounded-full"
+                  style={{ width: "60%" }}
+                />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="flex justify-between mt-4">
+        <div className="h-3 w-24 bg-gray-200 rounded" />
+        <div className="h-3 w-24 bg-gray-200 rounded" />
+      </div>
+    </div>
+  );
+}
+
 interface ResourceCardProps {
-  resource: Resource;
+  resource?: Resource;
   onClick?: (resource: Resource) => void;
+  isLoading?: boolean;
 }
 
 const statusConfig = {
@@ -39,7 +78,15 @@ const statusConfig = {
   },
 };
 
-export function ResourceCard({ resource, onClick }: ResourceCardProps) {
+export function ResourceCard({
+  resource,
+  onClick,
+  isLoading,
+}: ResourceCardProps) {
+  if (isLoading || !resource) {
+    return <ResourceCardSkeleton />;
+  }
+
   const status = statusConfig[resource.status];
   const StatusIcon = status.icon;
 

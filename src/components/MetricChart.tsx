@@ -128,8 +128,33 @@ interface MetricChartProps {
   className?: string;
 }
 
+function MetricChartSkeleton() {
+  return (
+    <div className="h-full p-6 rounded-lg shadow-md border border-gray-100 bg-white animate-pulse">
+      <div className="h-6 w-32 bg-gray-200 rounded mb-4" />
+      <div className="h-[calc(100%-3.5rem)] bg-gray-100 rounded">
+        <div className="h-full w-full flex items-end p-4">
+          {[...Array(6)].map((_, i) => (
+            <div
+              key={i}
+              className="flex-1 bg-gray-200 rounded-t mx-1"
+              style={{
+                height: `${Math.max(20, Math.random() * 80)}%`,
+              }}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function MetricChart({ type, title, className = "" }: MetricChartProps) {
-  const { getFormattedData } = useMetricHistory(type);
+  const { getFormattedData, isLoading } = useMetricHistory(type);
+
+  if (isLoading) {
+    return <MetricChartSkeleton />;
+  }
 
   return (
     <div
