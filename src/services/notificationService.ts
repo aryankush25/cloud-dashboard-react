@@ -9,6 +9,7 @@ class NotificationService {
   ) => void)[] = [];
   private notifications: Notification[] = [];
   private intervalId: NodeJS.Timeout | null = null;
+  private isAddedInitialNotifications = false;
 
   private constructor() {
     // Private constructor to enforce singleton
@@ -31,8 +32,12 @@ class NotificationService {
     }, Math.random() * 20000 + 10000);
 
     // Add initial notifications
-    for (let i = 0; i < 3; i++) {
-      this.addNotification(generateMockNotification(), false);
+    if (this.isAddedInitialNotifications === false) {
+      for (let i = 0; i < 3; i++) {
+        this.addNotification(generateMockNotification(), false);
+      }
+
+      this.isAddedInitialNotifications = true;
     }
   }
 
