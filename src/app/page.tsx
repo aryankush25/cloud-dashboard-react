@@ -6,6 +6,7 @@ import { FilterBar } from "../components/FilterBar";
 import { MetricChart } from "../components/MetricChart";
 import { NotificationPanel } from "../components/NotificationPanel";
 import { ResourceCard } from "../components/ResourceCard";
+import { DashboardFooter } from "../components/DashboardFooter";
 import { useResources } from "../hooks/useResources";
 import { useNotifications } from "../hooks/useNotifications";
 import { BellIcon } from "@heroicons/react/24/solid";
@@ -47,7 +48,7 @@ export default function Dashboard() {
   }, [notifications]);
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 flex flex-col">
       <Toaster position="top-right" />
 
       {/* Header */}
@@ -74,7 +75,7 @@ export default function Dashboard() {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         <div className="space-y-6">
           {/* Filters */}
           <FilterBar
@@ -119,6 +120,11 @@ export default function Dashboard() {
           </div>
         </div>
       </main>
+
+      {/* Footer */}
+      <div className="mt-12 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-50 to-white">
+        <DashboardFooter resources={allResources} />
+      </div>
 
       {/* Notification Drawer */}
       <NotificationPanel
