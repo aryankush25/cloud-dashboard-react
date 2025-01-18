@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { Toaster, toast } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { FilterBar } from "./FilterBar";
 import { MetricChart } from "./MetricChart";
 import { NotificationPanel } from "./NotificationPanel";
@@ -30,29 +30,6 @@ export default function Dashboard() {
     removeNotification,
     clearAll,
   } = useNotifications();
-
-  // Show toast for new notifications
-  React.useEffect(() => {
-    const handleNewNotification = (notification: (typeof notifications)[0]) => {
-      if (!notification.read) {
-        toast(notification.message, {
-          icon:
-            notification.type === "error"
-              ? "🔴"
-              : notification.type === "warning"
-              ? "⚠️"
-              : notification.type === "success"
-              ? "✅"
-              : "ℹ️",
-          duration: 4000,
-        });
-      }
-    };
-
-    if (notifications.length > 0) {
-      handleNewNotification(notifications[0]);
-    }
-  }, [notifications]);
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col">

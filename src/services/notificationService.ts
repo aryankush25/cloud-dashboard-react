@@ -3,7 +3,10 @@ import { generateMockNotification } from "./mockData";
 
 class NotificationService {
   private static instance: NotificationService;
-  private listeners: ((notifications: Notification[]) => void)[] = [];
+  private listeners: ((
+    notifications: Notification[],
+    options: { isAdded?: boolean }
+  ) => void)[] = [];
   private notifications: Notification[] = [];
   private intervalId: NodeJS.Timeout | null = null;
 
@@ -29,7 +32,7 @@ class NotificationService {
 
     // Add initial notifications
     for (let i = 0; i < 3; i++) {
-      this.addNotification(generateMockNotification());
+      this.addNotification(generateMockNotification(), false);
     }
   }
 
@@ -40,9 +43,9 @@ class NotificationService {
     }
   }
 
-  public addNotification(notification: Notification) {
+  public addNotification(notification: Notification, notify: boolean = true) {
     this.notifications = [notification, ...this.notifications];
-    this.notifyListeners();
+    this.notifyListeners(notify);
   }
 
   public markAsRead(notificationId: string) {
@@ -65,15 +68,22 @@ class NotificationService {
     return this.notifications;
   }
 
-  public subscribe(listener: (notifications: Notification[]) => void) {
+  public subscribe(
+    listener: (
+      notifications: Notification[],
+      options: { isAdded?: boolean }
+    ) => void
+  ) {
     this.listeners.push(listener);
     return () => {
       this.listeners = this.listeners.filter((l) => l !== listener);
     };
   }
 
-  private notifyListeners() {
-    this.listeners.forEach((listener) => listener(this.notifications));
+  private notifyListeners(isAdded: boolean = false) {
+    this.listeners.forEach((listener) =>
+      listener(this.notifications, { isAdded })
+    );
   }
 
   public clearAll() {
