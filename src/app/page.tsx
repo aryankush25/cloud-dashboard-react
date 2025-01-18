@@ -1,10 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 const Dashboard = dynamic(() => import("@/components/Dashboard"), {
   ssr: false,
-  loading: () => <p>Loading...</p>,
+  loading: () => <LoadingSpinner />,
 });
 
 export default function Home() {
