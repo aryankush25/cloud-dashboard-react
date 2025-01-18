@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import { Resource } from "../types";
 import {
   CheckCircleIcon,
@@ -45,6 +45,8 @@ export function ResourceCardSkeleton() {
   );
 }
 
+const ResourceCardSkeletonMemoized = memo(ResourceCardSkeleton);
+
 interface ResourceCardProps {
   resource?: Resource;
   onClick?: (resource: Resource) => void;
@@ -84,7 +86,7 @@ export function ResourceCard({
   isLoading,
 }: ResourceCardProps) {
   if (isLoading || !resource) {
-    return <ResourceCardSkeleton />;
+    return <ResourceCardSkeletonMemoized />;
   }
 
   const status = statusConfig[resource.status];

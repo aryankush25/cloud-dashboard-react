@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -149,11 +149,13 @@ function MetricChartSkeleton() {
   );
 }
 
+const MetricChartSkeletonMemoized = memo(MetricChartSkeleton);
+
 export function MetricChart({ type, title, className = "" }: MetricChartProps) {
   const { getFormattedData, isLoading } = useMetricHistory(type);
 
   if (isLoading) {
-    return <MetricChartSkeleton />;
+    return <MetricChartSkeletonMemoized />;
   }
 
   return (

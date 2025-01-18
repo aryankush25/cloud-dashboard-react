@@ -12,6 +12,7 @@ import { useNotifications } from "../hooks/useNotifications";
 import { BellIcon } from "@heroicons/react/24/solid";
 
 export default function Dashboard() {
+  console.log("Hello Client");
   const {
     resources,
     allResources,
