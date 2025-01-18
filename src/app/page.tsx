@@ -94,7 +94,7 @@ export default function Dashboard() {
           {/* Resources and Notifications */}
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
             {/* Resources Grid */}
-            <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-h-[calc(100vh-28rem)] overflow-y-auto p-1">
+            <div className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 overflow-y-auto p-1">
               {resources.length === 0 ? (
                 <div className="col-span-full p-8 text-center text-gray-500 bg-white rounded-lg">
                   No resources match the current filters
@@ -107,7 +107,7 @@ export default function Dashboard() {
             </div>
 
             {/* Notifications Panel */}
-            <div className="lg:col-span-1 max-h-[calc(100vh-28rem)]">
+            <div className="lg:col-span-1">
               <NotificationPanel
                 notifications={notifications}
                 unreadCount={unreadCount}
