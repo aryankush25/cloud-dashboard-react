@@ -45,7 +45,7 @@ export function ResourceCard({ resource, onClick }: ResourceCardProps) {
 
   return (
     <div
-      className={`h-full p-6 rounded-lg border shadow-md ${status.borderColor} ${status.bgColor} cursor-pointer transition-all hover:scale-[1.02] hover:shadow-lg bg-white/50 backdrop-blur-sm`}
+      className={`h-full p-6 rounded-lg border shadow-sm ${status.borderColor} ${status.bgColor} cursor-pointer transition-all hover:bg-white hover:border-gray-300 bg-white/50 backdrop-blur-sm`}
       onClick={() => onClick?.(resource)}
     >
       <div className="flex items-center justify-between mb-4">
@@ -114,7 +114,9 @@ function MetricItem({ label, value, color }: MetricItemProps) {
       </div>
       <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
         <div
-          className={`h-full ${getProgressBarColor(value)}`}
+          className={`h-full transition-all duration-500 ease-in-out ${getProgressBarColor(
+            value
+          )}`}
           style={{ width: `${value}%` }}
         />
       </div>
