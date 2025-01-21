@@ -6,6 +6,7 @@ import {
   XCircleIcon,
   MinusCircleIcon,
 } from "@heroicons/react/24/solid";
+import clsx from "clsx";
 
 export function ResourceCardSkeleton() {
   return (
@@ -27,10 +28,7 @@ export function ResourceCardSkeleton() {
                 <div className="h-3 w-8 bg-gray-200 rounded" />
               </div>
               <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
-                <div
-                  className="h-full bg-gray-200 rounded-full"
-                  style={{ width: "60%" }}
-                />
+                <div className="h-full bg-gray-200 rounded-full w-[60%]" />
               </div>
             </div>
           </div>
@@ -49,7 +47,6 @@ const ResourceCardSkeletonMemoized = memo(ResourceCardSkeleton);
 
 interface ResourceCardProps {
   resource?: Resource;
-  onClick?: (resource: Resource) => void;
   isLoading?: boolean;
 }
 
@@ -80,11 +77,7 @@ const statusConfig = {
   },
 };
 
-export function ResourceCard({
-  resource,
-  onClick,
-  isLoading,
-}: ResourceCardProps) {
+export function ResourceCard({ resource, isLoading }: ResourceCardProps) {
   if (isLoading || !resource) {
     return <ResourceCardSkeletonMemoized />;
   }
@@ -94,8 +87,7 @@ export function ResourceCard({
 
   return (
     <div
-      className={`h-full p-6 rounded-lg border shadow-sm ${status.borderColor} ${status.bgColor} cursor-pointer transition-all hover:bg-white hover:border-gray-300 bg-white/50 backdrop-blur-sm`}
-      onClick={() => onClick?.(resource)}
+      className={`h-full p-6 rounded-lg border shadow-sm ${status.borderColor} ${status.bgColor} transition-all hover:bg-white hover:border-gray-300 hover:bg-white/50 backdrop-blur-sm`}
     >
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
@@ -105,7 +97,7 @@ export function ResourceCard({
           </h3>
         </div>
         <span className="text-sm text-gray-500 flex-shrink-0">
-          {resource.type}
+          {resource.type.slice(0, 1).toUpperCase() + resource.type.slice(1)}
         </span>
       </div>
 
@@ -163,9 +155,10 @@ function MetricItem({ label, value, color }: MetricItemProps) {
       </div>
       <div className="h-2.5 bg-gray-100 rounded-full overflow-hidden">
         <div
-          className={`h-full transition-all duration-500 ease-in-out ${getProgressBarColor(
-            value
-          )}`}
+          className={clsx(
+            "h-full transition-all duration-500 ease-in-out",
+            getProgressBarColor(value)
+          )}
           style={{ width: `${value}%` }}
         />
       </div>

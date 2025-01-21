@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Resource, FilterOptions } from "../types";
 import {
   generateMockResources,
@@ -7,7 +7,6 @@ import {
 
 export function useResources() {
   const [resources, setResources] = useState<Resource[]>([]);
-  const [filteredResources, setFilteredResources] = useState<Resource[]>([]);
   const [filters, setFilters] = useState<FilterOptions>({});
   const [isLoading, setIsLoading] = useState(true);
 
@@ -20,7 +19,6 @@ export function useResources() {
         const initialResources = generateMockResources(15);
 
         setResources(initialResources);
-        setFilteredResources(initialResources);
       } finally {
         setIsLoading(false);
       }
@@ -35,12 +33,12 @@ export function useResources() {
 
         return updatedResources;
       });
-    }, 5000);
+    }, 10000);
 
     return () => clearInterval(intervalId);
   }, []);
 
-  useEffect(() => {
+  const filteredResources = useMemo(() => {
     let result = [...resources];
 
     if (filters.status) {
@@ -70,7 +68,7 @@ export function useResources() {
       );
     }
 
-    setFilteredResources(result);
+    return result;
   }, [resources, filters]);
 
   const updateFilters = (newFilters: Partial<FilterOptions>) => {
