@@ -40,7 +40,7 @@ export function generateMockResources(count: number = 10): Resource[] {
   return Array.from({ length: count }, generateMockResource);
 }
 
-export function generateMockNotification(resource?: Resource): Notification {
+export function generateMockNotification(): Notification {
   const types = ["info", "warning", "error", "success"] as const;
   const type = types[Math.floor(Math.random() * types.length)];
 
@@ -58,7 +58,6 @@ export function generateMockNotification(resource?: Resource): Notification {
     type,
     timestamp: new Date().toISOString(),
     read: false,
-    resourceId: resource?.id,
   };
 }
 

@@ -54,6 +54,17 @@ export default function Dashboard() {
                 </span>
               )}
             </button>
+
+            {/* Notification Drawer */}
+            <NotificationPanel
+              notifications={notifications}
+              unreadCount={unreadCount}
+              onMarkAsRead={markAsRead}
+              onRemove={removeNotification}
+              onClearAll={clearAll}
+              isOpen={isNotificationOpen}
+              onClose={() => setIsNotificationOpen(false)}
+            />
           </div>
         </div>
       </header>
@@ -119,17 +130,6 @@ export default function Dashboard() {
       <div className="mt-12 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-50 to-white">
         <DashboardFooter resources={allResources} />
       </div>
-
-      {/* Notification Drawer */}
-      <NotificationPanel
-        notifications={notifications}
-        unreadCount={unreadCount}
-        onMarkAsRead={markAsRead}
-        onRemove={removeNotification}
-        onClearAll={clearAll}
-        isOpen={isNotificationOpen}
-        onClose={() => setIsNotificationOpen(false)}
-      />
     </div>
   );
 }

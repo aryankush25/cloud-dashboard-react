@@ -28,7 +28,6 @@ export interface Notification {
   type: "info" | "warning" | "error" | "success";
   timestamp: string;
   read: boolean;
-  resourceId?: string;
 }
 
 export interface FilterOptions {

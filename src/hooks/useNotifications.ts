@@ -1,30 +1,30 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Notification } from "../types";
 import NotificationService from "../services/notificationService";
 import toast from "react-hot-toast";
 
 export function useNotifications() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
-  const [unreadCount, setUnreadCount] = useState(0);
 
-  const handleNewNotification = useCallback(
-    (notification: (typeof notifications)[0]) => {
-      if (!notification.read) {
-        toast(notification.message, {
-          icon:
-            notification.type === "error"
-              ? "🔴"
-              : notification.type === "warning"
-              ? "⚠️"
-              : notification.type === "success"
-              ? "✅"
-              : "ℹ️",
-          duration: 4000,
-        });
-      }
-    },
-    []
-  );
+  const unreadCount = useMemo(() => {
+    return notifications.filter((notification) => !notification.read).length;
+  }, [notifications]);
+
+  const handleNewNotification = useCallback((notification: Notification) => {
+    if (!notification.read) {
+      toast(notification.message, {
+        icon:
+          notification.type === "error"
+            ? "🔴"
+            : notification.type === "warning"
+            ? "⚠️"
+            : notification.type === "success"
+            ? "✅"
+            : "ℹ️",
+        duration: 4000,
+      });
+    }
+  }, []);
 
   useEffect(() => {
     const service = NotificationService.getInstance();
@@ -33,10 +33,6 @@ export function useNotifications() {
     const unsubscribe = service.subscribe(
       (updatedNotifications, { isAdded }) => {
         setNotifications(updatedNotifications);
-        setUnreadCount(
-          updatedNotifications.filter((notification) => !notification.read)
-            .length
-        );
 
         if (isAdded) {
           handleNewNotification(updatedNotifications[0]);

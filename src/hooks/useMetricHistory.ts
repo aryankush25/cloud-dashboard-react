@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { MetricHistory } from "../types";
 import { getMetricHistory } from "../services/mockData";
 
@@ -38,7 +38,7 @@ export function useMetricHistory(
     return () => clearInterval(intervalId);
   }, [metricType]);
 
-  const getFormattedData = () => {
+  const formattedData = useMemo(() => {
     return {
       labels: history.map((point) => {
         const date = new Date(point.timestamp);
@@ -58,11 +58,11 @@ export function useMetricHistory(
         },
       ],
     };
-  };
+  }, [history, metricType]);
 
   return {
     history,
-    getFormattedData,
+    formattedData,
     isLoading,
   };
 }

@@ -10,7 +10,6 @@ import {
   Filler,
   Legend,
   Colors,
-  TooltipItem,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 import { useMetricHistory } from "../hooks/useMetricHistory";
@@ -56,18 +55,6 @@ const chartOptions = {
       borderWidth: 1,
       titleFont: {
         weight: "bold" as const,
-      },
-      callbacks: {
-        title: (items: TooltipItem<"line">[]) => {
-          if (items.length > 0) {
-            const date = new Date(items[0].label);
-            return date.toLocaleTimeString([], {
-              hour: "2-digit",
-              minute: "2-digit",
-            });
-          }
-          return "";
-        },
       },
     },
   },
@@ -130,9 +117,10 @@ interface MetricChartProps {
 
 function MetricChartSkeleton() {
   return (
-    <div className="h-full p-6 rounded-lg shadow-md border border-gray-100 bg-white animate-pulse">
+    <div className="h-full p-6 rounded-lg shadow-md border border-gray-100 bg-white animate-pulse flex flex-col">
       <div className="h-6 w-32 bg-gray-200 rounded mb-4" />
-      <div className="h-[calc(100%-3.5rem)] bg-gray-100 rounded">
+
+      <div className="flex-1 bg-gray-100 rounded">
         <div className="h-full w-full flex items-end p-4">
           {[...Array(6)].map((_, i) => (
             <div
@@ -151,8 +139,8 @@ function MetricChartSkeleton() {
 
 const MetricChartSkeletonMemoized = memo(MetricChartSkeleton);
 
-export function MetricChart({ type, title, className = "" }: MetricChartProps) {
-  const { getFormattedData, isLoading } = useMetricHistory(type);
+export function MetricChart({ type, title }: MetricChartProps) {
+  const { formattedData, isLoading } = useMetricHistory(type);
 
   if (isLoading) {
     return <MetricChartSkeletonMemoized />;
@@ -160,11 +148,11 @@ export function MetricChart({ type, title, className = "" }: MetricChartProps) {
 
   return (
     <div
-      className={`h-full p-6 rounded-lg shadow-md border border-gray-100 bg-white ${className}`}
+      className={`h-full p-6 rounded-lg shadow-md border border-gray-100 bg-white flex flex-col justify-between gap-4`}
     >
-      <h3 className="text-lg font-medium text-gray-900 mb-4">{title}</h3>
+      <h3 className="text-lg font-medium text-gray-900">{title}</h3>
       <div className="h-[calc(100%-3.5rem)]">
-        <Line options={chartOptions} data={getFormattedData()} />
+        <Line options={chartOptions} data={formattedData} />
       </div>
     </div>
   );
