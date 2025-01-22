@@ -6,6 +6,9 @@ export interface Resource {
   region: string;
   account: string;
   metrics: ResourceMetrics;
+  instanceType: string;
+  instanceSize: string;
+  ipAddress: string;
 }
 
 export interface ResourceMetrics {

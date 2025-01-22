@@ -4,6 +4,29 @@ const regions = ["us-east-1", "us-west-2", "eu-west-1", "ap-southeast-1"];
 const accounts = ["Production", "Staging", "Development", "Testing"];
 const resourceTypes = ["server", "database", "storage"] as const;
 const statusTypes = ["healthy", "warning", "critical", "offline"] as const;
+const instanceTypes = [
+  "General Purpose",
+  "Compute Optimized",
+  "Memory Optimized",
+  "Storage Optimized",
+  "Accelerated Computing (GPU Instances)",
+  "High Performance Computing (HPC)",
+  "High Network Throughput",
+] as const;
+const instanceSizes = [
+  "Micro",
+  "Small",
+  "Medium",
+  "Large",
+  "Extra Large",
+  "2xLarge and Higher",
+  "High-Memory Instances",
+  "High-CPU Instances",
+  "GPU Instances",
+  "Storage-Optimized Instances",
+  "High-Network Instances",
+  "Burstable Instances",
+] as const;
 
 function generateRandomMetric(): number {
   return Math.floor(Math.random() * 100);
@@ -18,6 +41,10 @@ function generateMockResource(): Resource {
   const status = statusTypes[Math.floor(Math.random() * statusTypes.length)];
   const region = regions[Math.floor(Math.random() * regions.length)];
   const account = accounts[Math.floor(Math.random() * accounts.length)];
+  const instanceType =
+    instanceTypes[Math.floor(Math.random() * instanceTypes.length)];
+  const instanceSize =
+    instanceSizes[Math.floor(Math.random() * instanceSizes.length)];
 
   return {
     id: generateRandomId(),
@@ -26,6 +53,9 @@ function generateMockResource(): Resource {
     status,
     region,
     account,
+    instanceType,
+    instanceSize,
+    ipAddress: "0.0.0.0",
     metrics: {
       cpu: generateRandomMetric(),
       memory: generateRandomMetric(),

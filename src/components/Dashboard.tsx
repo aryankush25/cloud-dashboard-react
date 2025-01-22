@@ -7,7 +7,7 @@ import { MetricChart } from "./MetricChart";
 import { NotificationPanel } from "./NotificationPanel";
 import { ResourceCard } from "./ResourceCard";
 import { DashboardFooter } from "./DashboardFooter";
-import { useResources } from "../hooks/useResources";
+import { useResourcesContext } from "../context/ResourcesContext";
 import { useNotifications } from "../hooks/useNotifications";
 import { BellIcon } from "@heroicons/react/24/solid";
 
@@ -20,7 +20,7 @@ export default function Dashboard() {
     updateFilters,
     clearFilters,
     isLoading,
-  } = useResources();
+  } = useResourcesContext();
   const [isNotificationOpen, setIsNotificationOpen] = React.useState(false);
 
   const {

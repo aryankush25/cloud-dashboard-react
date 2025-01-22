@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { ResourcesProvider } from "@/context/ResourcesContext";
 
 const Dashboard = dynamic(() => import("@/components/Dashboard"), {
   ssr: false,
@@ -11,5 +12,9 @@ const Dashboard = dynamic(() => import("@/components/Dashboard"), {
 export default function Home() {
   console.log("Hello Client");
 
-  return <Dashboard />;
+  return (
+    <ResourcesProvider>
+      <Dashboard />
+    </ResourcesProvider>
+  );
 }
